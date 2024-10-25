@@ -31,6 +31,7 @@ export class OrderController {
 
   @Delete(':id')
   async deleteOrder(@Param('id') id: number) {
+    console.log(this.deleteOrder)
     return this.orderService.deleteOrder(id);
   }
 }
