@@ -20,6 +20,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { User } from '../user/src/user.entity';
+import { Order } from '../order/src/order.entity';
 
 @Module({
   imports: [
@@ -27,14 +29,31 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
+      name: 'ordersConnection',
       useFactory: (configService: ConfigService) => ({
         type: 'mysql', 
-        host: configService.get('DB_HOST', '127.0.0.1'),
-        port: configService.get<number>('DB_PORT', 3306),
-        username: configService.get('DB_USER', 'root'),
-        password: configService.get('DB_PASS', ''),
-        database: configService.get('DB_NAME', 'microservices_db'),
-        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+        host: configService.get('DB1_HOST', '127.0.0.1'),
+        port: configService.get<number>('DB1_PORT', 3306),
+        username: configService.get('DB1_USERNAME', 'root'),
+        password: configService.get('DB1_PASSWORD', ''),
+        database: configService.get('DB1_NAME', 'orders_db'),
+        entities:[Order],
+        synchronize: true, 
+      }),
+    }),
+
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      name: 'usersConnection',
+      useFactory: (configService: ConfigService) => ({
+        type: 'mysql', 
+        host: configService.get('DB2_HOST', '127.0.0.1'),
+        port: configService.get<number>('DB2_PORT', 3306),
+        username: configService.get('DB2_USERNAME', 'root'),
+        password: configService.get('DB2_PASSWORD', ''),
+        database: configService.get('DB2_NAME', 'users_db'),
+        entities:[User],
         synchronize: true, 
       }),
     }),

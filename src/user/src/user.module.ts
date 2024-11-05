@@ -21,7 +21,7 @@ import { DatabaseModule } from '../../database/database.module';
       },
     ]),
     DatabaseModule,
-    TypeOrmModule.forFeature([User])
+    TypeOrmModule.forFeature([User], 'usersConnection')
   ],
   controllers: [UserController],
   providers: [UserService],

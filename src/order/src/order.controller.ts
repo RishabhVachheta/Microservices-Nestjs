@@ -10,13 +10,14 @@ export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   @MessagePattern({ cmd: 'get_orders_by_user' })
-  getOrdersByUser(@Payload() data: { userId: number }) {
-    return this.orderService.getOrdersByUser(data.userId);
+  async getOrdersByUser(@Payload() data: { userId: number }) {
+    return await this.orderService.getOrdersByUser(data.userId);
   }
 
+  // Handler to get all orders
   @MessagePattern({ cmd: 'get_orders' })
-  getOrders() {
-    return this.orderService.getOrders();
+  async getOrders() {
+    return await this.orderService.getOrders();
   }
 
   @Post()

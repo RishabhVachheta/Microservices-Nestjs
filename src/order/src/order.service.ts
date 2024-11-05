@@ -8,9 +8,17 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 @Injectable()
 export class OrderService {
   constructor(
-    @InjectRepository(Order)
+    @InjectRepository(Order, 'ordersConnection')
     private readonly orderRepository: Repository<Order>,
   ) {}
+
+  async getOrders() {
+    return await this.orderRepository.find();
+  }
+
+  async getOrdersByUser(userId: number) {
+    return await this.orderRepository.find({ where: { userId } });
+  }
 
   async createOrder(createOrderDto: CreateOrderDto): Promise<Order> {
     const order = this.orderRepository.create(createOrderDto);
@@ -35,13 +43,5 @@ export class OrderService {
       throw new NotFoundException('Order not found');
     }
     return { message: 'Order deleted successfully' };
-  }
-
-  getOrders() {
-    return this.orderRepository.find();  // Fetch all orders from the database
-  }
-
-  getOrdersByUser(userId: number) {
-    return this.orderRepository.find({ where: { userId } });  // Fetch orders for a specific user
   }
 }
